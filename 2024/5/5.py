@@ -37,4 +37,5 @@ for line in invalid_lines:
     sorted_line = sorted(line, key=cmp_to_key(compare))
     sum2 += int(sorted_line[len(line)//2])
 
+print(sum1)
 print(sum2)
