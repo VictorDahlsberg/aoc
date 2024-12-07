@@ -1,3 +1,5 @@
+from collections import deque
+import sys
 input = open("input").read().strip()
 
 
@@ -8,6 +10,8 @@ def get_visited(pos, grid):
 
     while True:
         visited.add(pos)
+        # if pos[0] == 41:
+        # print(pos)
         if (pos[0], pos[1], dirr) in visited_dirrs:
             return visited, True
         visited_dirrs.add((pos[0], pos[1], dirr))
@@ -37,18 +41,6 @@ def get_walls(visited, start_pos):
     return walls
 
 
-def get_walls_2():
-    walls = set()
-    for y in range(130):
-        for x in range(130):
-            tmp = grid[y][x]
-            grid[y][x] = "#"
-            if get_visited((42, 83), grid)[1]:
-                walls.add((x, y))
-            grid[y][x] = tmp
-    return walls
-
-
 def get_start_pos(grid):
     for y in range(len(grid)):
         for x in range(len(grid[0])):
@@ -58,7 +50,7 @@ def get_start_pos(grid):
 
 grid = [[c for c in line] for line in input.split("\n")]
 start_pos = get_start_pos(grid)
+grid[start_pos[1]][start_pos[0]] = "."
 visited = get_visited(start_pos, grid)
 print(len(visited[0]))
 print(len(get_walls(visited, start_pos)))
-print(len(get_walls_2()))
