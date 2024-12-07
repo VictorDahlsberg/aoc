@@ -1,17 +1,16 @@
-from collections import defaultdict
 input = open("input").read().strip()
 
 
 def get_visited(pos, grid):
     visited = set()
-    visited_dirrs = defaultdict(set)
+    visited_dirrs = set()
     dirr = 0
 
     while True:
         visited.add(pos)
-        if dirr in visited_dirrs[pos]:
+        if (pos[0], pos[1], dirr) in visited_dirrs:
             return visited, True
-        visited_dirrs[pos].add(dirr)
+        visited_dirrs.add((pos[0], pos[1], dirr))
         directions = [(pos[0], pos[1] - 1), (pos[0] + 1, pos[1]),
                       (pos[0], pos[1] + 1), (pos[0] - 1, pos[1])]
 
@@ -27,12 +26,12 @@ def get_visited(pos, grid):
         pos = nextPos
 
 
-def get_walls(visited):
+def get_walls(visited, start_pos):
     walls = set()
     for x, y in visited[0]:
         if grid[y][x] == ".":
             grid[y][x] = "#"
-            if get_visited((42, 83), grid)[1]:
+            if get_visited(start_pos, grid)[1]:
                 walls.add((x, y))
             grid[y][x] = "."
     return walls
@@ -42,17 +41,24 @@ def get_walls_2():
     walls = set()
     for y in range(130):
         for x in range(130):
-            if grid[y][x] == ".":
-                grid[y][x] = "#"
-                if get_visited((42, 83), grid)[1]:
-                    walls.add((x, y))
-                grid[y][x] = "."
+            tmp = grid[y][x]
+            grid[y][x] = "#"
+            if get_visited((42, 83), grid)[1]:
+                walls.add((x, y))
+            grid[y][x] = tmp
     return walls
 
 
-grid = [[c for c in line] for line in input.split("\n")]
+def get_start_pos(grid):
+    for y in range(len(grid)):
+        for x in range(len(grid[0])):
+            if grid[y][x] == "^":
+                return (x, y)
 
-visited = get_visited((42, 83), grid)
+
+grid = [[c for c in line] for line in input.split("\n")]
+start_pos = get_start_pos(grid)
+visited = get_visited(start_pos, grid)
 print(len(visited[0]))
-print(len(get_walls(visited)))
+print(len(get_walls(visited, start_pos)))
 print(len(get_walls_2()))
