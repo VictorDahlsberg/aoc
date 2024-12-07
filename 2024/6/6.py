@@ -1,5 +1,3 @@
-from collections import deque
-import sys
 input = open("input").read().strip()
 
 
